@@ -5,25 +5,37 @@
  * Description:
  * 
  * Generate a model for adjustment knobs on POTS, switches, etc.
+ * 
+ * Who needs to spend multiple dollars at a hardware store just for a 
+ * replacement knob for a broken appliance? 
+ * 
+ * With a $1000 3D printer, and an hour or so of fabrication,
+ * you never have to be a slave to the consumer economy again!
  */
 
 
 
 // *** VARIABLES ***
-standard_fn = 60;
 
-
-
-knob_diameter = 25;
-knob_height = 10;
-knob_edge = .85;
+knob_diameter = 25;	// Overall diameter of the knob.
+					// Slightly larger due to beveling at the bottom.
+					
+knob_height = 10;	// Hieght of the beveled base of the knob.
+					// Pointer grip is twice this height.
+					
+knob_edge = .85;	// Percentage adjusts how steep the bevel is.
 
 stem_diameter = 7;
-notches = 2;
+notches = 2;		// Number of notches on the shaft to hold the knob.
 
-notch_depth = .5;
-notch_angle = 0;
+notch_depth = .5;	// How far in does the key-notch extend.
+notch_angle = 0;	// Degree the notch is offset from pointer.
 
+add_grip = true;	// Set to 'false' to remove the pointer grip.
+//add_grip = false;
+
+
+standard_fn = 60;
 
 
 
@@ -66,15 +78,31 @@ module knob_grip() {
 module dial_knob(notch=0, angle=0) {
 	
 	
+		
 	difference() {
 		
 		union() {
 			knob_base();
-			knob_grip();
+			
+			if (add_grip==true) {
+				
+				knob_grip();
+			}
 		}
 		
-		translate([ 0, 0, 0 - (knob_height / 2) ])
-			cylinder(h=knob_height * 2, d=stem_diameter);
+		// If pointer grip is enabled, then hole is twice as deep.
+		if (add_grip==true) {
+			
+			translate([ 0, 0, 0 - (knob_height / 2) ])
+				cylinder(h=knob_height * 2, d=stem_diameter);
+			
+		}
+		else {
+			
+			translate([ 0, 0, 0 - (knob_height / 2) ])
+				cylinder(h=knob_height, d=stem_diameter);
+			
+		}
 		
 	}
 	
