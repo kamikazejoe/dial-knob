@@ -26,7 +26,7 @@ knob_height = 10;	// Hieght of the beveled base of the knob.
 knob_edge = .85;	// Percentage adjusts how steep the bevel is.
 
 stem_diameter = 7;
-notches = 2;		// Number of notches on the shaft to hold the knob.
+notches = 1;		// Number of notches on the shaft to hold the knob.
 
 notch_depth = .5;	// How far in does the key-notch extend.
 notch_angle = 0;	// Degree the notch is offset from pointer.
@@ -34,6 +34,7 @@ notch_angle = 0;	// Degree the notch is offset from pointer.
 add_grip = true;	// Set to 'false' to remove the pointer grip.
 //add_grip = false;
 
+knob_label = "LABEL";
 
 standard_fn = 60;
 
@@ -74,6 +75,22 @@ module knob_grip() {
 }
 
 
+module text_label() {
+	
+	text = knob_label;
+	font = "Liberation Sans";
+	size = knob_diameter / 6;
+	height = knob_height;
+	
+	linear_extrude(height = height) {
+		text(text = text, 
+		     font = font, 
+		     size = size, 
+		     valign = "center", 
+		     halign = "center");
+	}
+}
+
 
 module dial_knob(notch=0, angle=0) {
 	
@@ -81,6 +98,7 @@ module dial_knob(notch=0, angle=0) {
 		
 	difference() {
 		
+		// Build base and grip
 		union() {
 			knob_base();
 			
@@ -104,8 +122,16 @@ module dial_knob(notch=0, angle=0) {
 			
 		}
 		
+		// Label text.
+		translate([ 0, 
+					0, 
+					(knob_height * 2)])
+			rotate([0,0,0])
+				text_label();
+		
 	}
 	
+	// Add key-notches
 	if (notch>0) {
 		
 		for (i = [1:notch]) {
