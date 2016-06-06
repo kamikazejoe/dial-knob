@@ -1,4 +1,4 @@
-Dial Knob Generator
+===Dial Knob Generator===
 
 Generate a model for adjustment knobs on POTS, switches, etc.
  
